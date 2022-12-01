@@ -25,5 +25,15 @@ router.get('/getAll', async (req, res) => {
         res.status(500).json({message: error.message})
     }
 })
+router.delete('/delete/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const data = await Model.findByIdAndDelete(id)
+        res.send(`Document with ${data.text} has been deleted..`)
+    }
+    catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+})
 
 module.exports = router
