@@ -35,5 +35,21 @@ router.delete('/delete/:id', async (req, res) => {
         res.status(400).json({ message: error.message })
     }
 })
+router.patch('/update/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updatedData = req.body;
+        const options = { new: true };
+        const {taskStatus} = req.params
+
+        const result = await Model.findByIdAndUpdate(
+            id, updatedData, options, taskStatus
+        )
+        res.send(result)
+    }
+    catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+})
 
 module.exports = router
