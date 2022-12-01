@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const Model = require('./task/task');
 
-router.post('/api/task', async(req, res) => {
+router.post('/api/tasks', async(req, res) => {
     const data = new Model({
         text: req.body.text,
         date: new Date().toLocaleString(),
@@ -16,7 +16,7 @@ router.post('/api/task', async(req, res) => {
         res.status(400).json({message: error.message})
     }
 })
-router.get('/getAll', async (req, res) => {
+router.get('/api/tasks', async (req, res) => {
     try{
         const data = await Model.find();
         res.json(data)
@@ -25,17 +25,17 @@ router.get('/getAll', async (req, res) => {
         res.status(500).json({message: error.message})
     }
 })
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/api/tasks/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const data = await Model.findByIdAndDelete(id)
-        res.send(`Document with ${data.text} has been deleted..`)
+        await Model.findByIdAndDelete(id)
+        res.send()
     }
     catch (error) {
         res.status(400).json({ message: error.message })
     }
 })
-router.patch('/update/:id', async (req, res) => {
+router.patch('/api/tasks/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const updatedData = req.body;
@@ -51,7 +51,7 @@ router.patch('/update/:id', async (req, res) => {
         res.status(400).json({ message: error.message })
     }
 })
-router.get('/getOne/:id', async (req, res) => {
+router.get('/api/tasks/:id', async (req, res) => {
     try{
         const data = await Model.findById(req.params.id);
         res.json(data)
