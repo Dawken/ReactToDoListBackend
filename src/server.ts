@@ -10,7 +10,7 @@ const corsOptions = {
     origin: "http://localhost:5000"
 };
 
-mongoose.connect(mongoString,{ useNewUrlParser: true , useUnifiedTopology: true });
+mongoose.connect(mongoString,{ useNewUrlParser: true , useUnifiedTopology: true, useFindAndModify: false });
 const database = mongoose.connection;
 
 database.on('error', (error) => {

@@ -41,9 +41,10 @@ router.patch('/api/tasks/:id', async (req, res) => {
         const updatedData = req.body;
         const options = { new: true };
         const {taskStatus} = req.params
+        const {description} = req.params
 
         const result = await Model.findByIdAndUpdate(
-            id, updatedData, options, taskStatus
+            id, updatedData, options, taskStatus, description
         )
         res.send(result)
     }
