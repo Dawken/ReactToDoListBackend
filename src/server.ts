@@ -7,7 +7,7 @@ const mongoString = process.env.DATABASE_URL
 const app = express()
 
 const corsOptions = {
-    origin: "http://localhost:5000"
+    origin: "http://localhost:3000"
 };
 
 mongoose.connect(mongoString,{ useNewUrlParser: true , useUnifiedTopology: true, useFindAndModify: false });
