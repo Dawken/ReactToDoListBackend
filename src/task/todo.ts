@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const Model = require('./task/task');
+const Model = require('./taskModel')
 
 router.post('/api/tasks', async(req, res) => {
     const data = new Model({
@@ -9,7 +9,7 @@ router.post('/api/tasks', async(req, res) => {
         taskStatus: 'todo'
     })
     try{
-        const dataToSave = data.save();
+        const dataToSave = data.save()
         res.status(200).json(dataToSave)
     }
     catch(error) {
@@ -18,7 +18,7 @@ router.post('/api/tasks', async(req, res) => {
 })
 router.get('/api/tasks', async (req, res) => {
     try{
-        const data = await Model.find();
+        const data = await Model.find()
         res.json(data)
     }
     catch(error){
@@ -27,7 +27,7 @@ router.get('/api/tasks', async (req, res) => {
 })
 router.delete('/api/tasks/:id', async (req, res) => {
     try {
-        const id = req.params.id;
+        const id = req.params.id
         await Model.findByIdAndDelete(id)
         res.send()
     }
@@ -37,9 +37,9 @@ router.delete('/api/tasks/:id', async (req, res) => {
 })
 router.patch('/api/tasks/:id', async (req, res) => {
     try {
-        const id = req.params.id;
-        const updatedData = req.body;
-        const options = { new: true };
+        const id = req.params.id
+        const updatedData = req.body
+        const options = { new: true }
         const {taskStatus} = req.params
         const {description} = req.params
 
@@ -54,7 +54,7 @@ router.patch('/api/tasks/:id', async (req, res) => {
 })
 router.get('/api/tasks/:id', async (req, res) => {
     try{
-        const data = await Model.findById(req.params.id);
+        const data = await Model.findById(req.params.id)
         res.json(data)
     }
     catch(error){
