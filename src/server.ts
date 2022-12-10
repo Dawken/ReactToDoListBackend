@@ -3,8 +3,8 @@ import express from 'express'
 const mongoose = require('mongoose');
 const cors = require("cors");
 const mongoString = process.env.DATABASE_URL
-const apiRoute = require('./task/todo')
-const formRoute = require('./form/form')
+const apiRoute = require('./routes/task/task')
+const formRoute = require('./routes/user/registerData')
 
 const app = express()
 
