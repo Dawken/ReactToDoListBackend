@@ -9,8 +9,12 @@ const formSchema = new mongoose.Schema({
         required: true,
         type: String
     },
-    secondName: {
+    lastName: {
         required: false,
+        type: String
+    },
+    password: {
+        required: true,
         type: String
     },
     gender: {
@@ -19,10 +23,6 @@ const formSchema = new mongoose.Schema({
     },
     birthDate: {
         required: true,
-        type: String
-    },
-    password: {
-        required: false,
         type: String
     }
 })
