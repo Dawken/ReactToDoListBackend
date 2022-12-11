@@ -22,7 +22,7 @@ export class RegisterDTO implements Form {
 	@Length(3)
     	name: string
 
-	@Length(5)
+	@Length(3)
     	lastName: string
 
 	@IsString()
