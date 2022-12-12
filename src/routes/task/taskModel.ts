@@ -16,6 +16,10 @@ const dataSchema = new mongoose.Schema({
     taskStatus: {
         required: true,
         type: String
+    },
+    userID : {
+        required: true,
+        type: String
     }
 })
 

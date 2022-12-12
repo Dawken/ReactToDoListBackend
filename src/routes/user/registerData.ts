@@ -48,14 +48,16 @@ const generateAccessToken = (username) => {
 
 formRouter.post('/api/login', async(req, res) => {
 	try {
-		const password = await formModel.findOne({login: req.body.login}, 'password').exec()
-		if(bcrypt.compareSync(req.body.password, password.password)) {
-			const token = generateAccessToken({login: req.body.login})
+		const user = await formModel.findOne({login: req.body.login}).exec()
+		user.toJSON()
+		if(bcrypt.compareSync(req.body.password, user.password)) {
+			delete user.password
+			const token = generateAccessToken(user.toJSON())
 			res.cookie(
 				'AuthToken',
 				token,
 				{
-					maxAge: 1800,
+					maxAge: 1800 * 1000,
 					httpOnly: true
 				}
 			)

@@ -2,12 +2,14 @@ const router = require('express').Router()
 const Model = require('./taskModel')
 
 router.post('/api/tasks', async(req, res) => {
+    console.log(req.user)
     try {
         const data = new Model({
             text: req.body.text,
             date: new Date().toLocaleString(),
             description: '',
-            taskStatus: 'todo'
+            taskStatus: 'todo',
+            userID: req.user._id
         })
         const dataToSave = data.save()
         res.status(200).json(dataToSave)
@@ -19,7 +21,7 @@ router.post('/api/tasks', async(req, res) => {
 })
 router.get('/api/tasks', async (req, res) => {
     try {
-        const data = await Model.find()
+        const data = await Model.find({userID: req.user._id})
         res.json(data)
     }
     catch(error){
