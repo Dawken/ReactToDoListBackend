@@ -1,11 +1,12 @@
 import {RegisterDTO} from './registerDTO'
 import {bodyValidator} from '../../shared/bodyValidator'
-import * as mongoose from 'mongoose'
-import {response} from 'express'
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 const formModel = require('./registerModel')
 const formRouter = require('express').Router()
+
 
 formRouter.post('/api/register', async(req, res) => {
 	try {
@@ -41,10 +42,25 @@ formRouter.post('/api/register', async(req, res) => {
 		res.status(400).json({message: error.message})
 	}
 })
+const generateAccessToken = (username) => {
+	return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' })
+}
+
 formRouter.post('/api/login', async(req, res) => {
 	try {
 		const password = await formModel.findOne({login: req.body.login}, 'password').exec()
-		res.status(200).json(bcrypt.compareSync(req.body.password, password.password))
+		if(bcrypt.compareSync(req.body.password, password.password)) {
+			const token = generateAccessToken({login: req.body.login})
+			res.cookie(
+				'AuthToken',
+				token,
+				{
+					maxAge: 1800,
+					httpOnly: true
+				}
+			)
+			res.status(200).send({message: 'yikes'})
+		}
 	}
 	catch (error) {
 		console.log(error)
