@@ -1,4 +1,4 @@
-import {IsEnum, IsString, Length} from 'class-validator'
+import {IsEnum, IsString, Length, Matches} from 'class-validator'
 
 enum TGender {
 	Male = 'Male',
@@ -10,22 +10,22 @@ interface Form {
     login: string
     name: string
     lastName: string
-    password: string
+    password: string,
     gender: string
     birthDate: string
 }
 
 export class RegisterDTO implements Form {
-    @Length(3, 16)
+    @Length(3, 16) @IsString()
     	login: string
 
-	@Length(3)
+	@Length(3) @IsString()
     	name: string
 
 	@Length(3)
     	lastName: string
 
-	@IsString()
+	@Matches(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/)
     	password: string
 
     @IsEnum(TGender)

@@ -1,14 +1,16 @@
 import {RegisterDTO} from './registerDTO'
 import {bodyValidator} from '../../shared/bodyValidator'
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-require('dotenv').config()
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import {config} from 'dotenv'
+import Register from './registerModel'
+import {Router} from 'express'
 
-const formModel = require('./registerModel')
-const formRouter = require('express').Router()
+config()
 
+const registerRouter = Router()
 
-formRouter.post('/api/register', async(req, res) => {
+registerRouter.post('/api/register', async(req, res) => {
 	try {
 		await bodyValidator(RegisterDTO, req.body)
 		const birth = req.body.birthDate
@@ -17,17 +19,12 @@ formRouter.post('/api/register', async(req, res) => {
 		if(new Date(birth) >= date18YearsAgo) {
 			return res.status(400).json({message: 'You have to be at least 18 years old'})
 		}
-		const userLogin = await formModel.findOne({login: req.body.login}, 'login').exec()
+		const userLogin = await Register.findOne({login: req.body.login}, 'login').exec()
 		if(userLogin) {
 			return res.status(400).json({message:'User already exist!'})
 		}
-		if(!/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/.test(req.body.password)) {
-			return res.status(400).json({
-				message: '\'Password need to has at least 1 Capital letter, 1 special symbol, 1 number and be 8 symbols long\''
-			})
-		}
 		const hashedPassword = bcrypt.hashSync(req.body.password, 10)
-		const data = new formModel({
+		const data = new Register({
 			login: req.body.login,
 			name: req.body.name,
 			lastName: req.body.lastName,
@@ -42,14 +39,13 @@ formRouter.post('/api/register', async(req, res) => {
 		res.status(400).json({message: error.message})
 	}
 })
-const generateAccessToken = (username) => {
-	return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' })
+const generateAccessToken = (userAccountData:object) => {
+	return jwt.sign(userAccountData, process.env.TOKEN_SECRET, {expiresIn: '1800s'})
 }
 
-formRouter.post('/api/login', async(req, res) => {
+registerRouter.post('/api/login', async(req, res) => {
 	try {
-		const user = await formModel.findOne({login: req.body.login}).exec()
-		user.toJSON()
+		const user = await Register.findOne({login: req.body.login}).exec()
 		if(bcrypt.compareSync(req.body.password, user.password)) {
 			delete user.password
 			const token = generateAccessToken(user.toJSON())
@@ -61,12 +57,14 @@ formRouter.post('/api/login', async(req, res) => {
 					httpOnly: true
 				}
 			)
-			res.status(200).send({message: 'yikes'})
+			res.status(200).send({message: 'Logged'})
+		} else {
+			res.status(400).json({message: 'Password doesn\'t match!'})
 		}
 	}
 	catch (error) {
-		console.log(error)
+		res.status(400).json({message: error.message})
 	}
 })
 
-module.exports = formRouter
+export default registerRouter
