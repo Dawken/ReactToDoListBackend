@@ -6,7 +6,7 @@ enum TGender {
     Other = 'Other'
 }
 
-interface Form {
+interface RegisterTypes {
     login: string
     name: string
     lastName: string
@@ -15,14 +15,17 @@ interface Form {
     birthDate: string
 }
 
-export class RegisterDTO implements Form {
-    @Length(3, 16) @IsString()
+export class RegisterDTO implements RegisterTypes {
+    @Length(3, 16)
+	@IsString()
     	login: string
 
-	@Length(3) @IsString()
+	@Length(3)
+	@IsString()
     	name: string
 
 	@Length(3)
+	@IsString()
     	lastName: string
 
 	@Matches(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/)

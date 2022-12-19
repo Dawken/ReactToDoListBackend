@@ -3,14 +3,21 @@ import {config} from 'dotenv'
 import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
-import apiRoute from './routes/task/task.routes.'
-import registerRouter from './routes/register/registerData.routes.'
-import {authenticateToken, corsOptions} from './middlewares/middlewares'
+import apiRoute from './routes/task/task.routes'
+import registerRouter from './routes/register/registerData.routes'
+import authenticateToken from './middlewares/authenticateToken'
 
 
 const mongoString = process.env.DATABASE_URL
 config()
 const app = express()
+
+const localhost = process.env.ORIGIN
+
+const corsOptions = {
+	origin: localhost,
+	credentials: true
+}
 
 mongoose.connect(mongoString,{ useNewUrlParser: true , useUnifiedTopology: true, useFindAndModify: false })
 

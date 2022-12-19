@@ -1,16 +1,22 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "sourceMap": true,
-    "target": "es2017",
     "outDir": "./dist",
-    "baseUrl": "./src",
-    "allowSyntheticDefaultImports": true,
-    "module": "commonjs",
-    "esModuleInterop": true
+    "baseUrl": "./",
+    "target": "es2017",
+    "esModuleInterop": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
+    "module": "CommonJS",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/@types"
+    ]
   },
   "include": [
-    "src/**/*.ts"
+    "src"
   ],
   "exclude": [
     "node_modules"

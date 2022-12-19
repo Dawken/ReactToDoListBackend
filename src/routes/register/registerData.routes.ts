@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import {config} from 'dotenv'
 import Register from './registerModel'
 import {Router} from 'express'
+import {User} from '../../types/customUser'
 
 config()
 
@@ -17,7 +18,7 @@ registerRouter.post('/api/register', async(req, res) => {
 		const date18YearsAgo = new Date()
 		date18YearsAgo.setFullYear(date18YearsAgo.getFullYear()-18)
 		if(new Date(birth) >= date18YearsAgo) {
-			return res.status(400).json({message: 'You have to be at least 18 years old'})
+			return res.status(401).json({message: 'You have to be at least 18 years old'})
 		}
 		const userLogin = await Register.findOne({login: req.body.login}, 'login').exec()
 		if(userLogin) {
@@ -39,7 +40,7 @@ registerRouter.post('/api/register', async(req, res) => {
 		res.status(400).json({message: error.message})
 	}
 })
-const generateAccessToken = (userAccountData:object) => {
+const generateAccessToken = (userAccountData:User) => {
 	return jwt.sign(userAccountData, process.env.TOKEN_SECRET, {expiresIn: '1800s'})
 }
 
