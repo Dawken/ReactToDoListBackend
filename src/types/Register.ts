@@ -1,4 +1,4 @@
-export type User = {
+export type Register = {
 	_id: string,
 	login: string,
 	name: string,

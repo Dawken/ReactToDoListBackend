@@ -1,6 +1,6 @@
 import {IsEnum, IsString, Length, Matches} from 'class-validator'
 
-enum TGender {
+enum Gender {
 	Male = 'Male',
     Female = 'Female',
     Other = 'Other'
@@ -28,11 +28,12 @@ export class RegisterDTO implements RegisterTypes {
 	@IsString()
     	lastName: string
 
+	// Check password includes at least 1 capital letter, 1 special symbol and has at least 8 symbols
 	@Matches(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/)
     	password: string
 
-    @IsEnum(TGender)
-    	gender: TGender
+    @IsEnum(Gender)
+    	gender: Gender
 
     @IsString()
     	birthDate: string

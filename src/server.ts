@@ -19,7 +19,7 @@ const corsOptions = {
 	credentials: true
 }
 
-mongoose.connect(mongoString,{ useNewUrlParser: true , useUnifiedTopology: true, useFindAndModify: false })
+mongoose.connect(mongoString,{useNewUrlParser: true , useUnifiedTopology: true, useFindAndModify: false})
 
 const database = mongoose.connection
 

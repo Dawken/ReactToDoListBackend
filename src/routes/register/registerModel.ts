@@ -1,6 +1,16 @@
 import * as mongoose from 'mongoose'
 
-const registerSchema = new mongoose.Schema({
+interface UserInterface extends mongoose.Document {
+	_id: string,
+	login: string,
+	name: string,
+	lastName: string,
+	password: string,
+	gender: string,
+	birthDate: string,
+}
+
+const userAccountSchema = new mongoose.Schema({
 	login: {
 		required: true,
 		type: String
@@ -27,4 +37,4 @@ const registerSchema = new mongoose.Schema({
 	}
 })
 
-export default mongoose.model('usersAccounts', registerSchema)
+export default mongoose.model<UserInterface>('userAccount', userAccountSchema)

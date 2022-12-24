@@ -1,25 +1,9 @@
-import {User} from '../types/customUser'
-
-// export interface RequestCustom extends Request {
-// 	user?: User,
-// 	cookies: {
-// 		AuthToken: string
-// 	}
-// }
-// export interface ResponseCustom extends Response {
-// 	status: (number:number) => any
-// }
+import {Register} from '../types/Register'
 
 declare global {
-	namespace Express {
-		interface Request {
-			user?: User
+	export namespace Express {
+		export interface Request {
+			user?: Register
 		}
 	}
 }
-// 	interface Response {
-// 		status?: any
-// 	}
-//
-// }
-

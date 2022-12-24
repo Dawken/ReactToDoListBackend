@@ -6,6 +6,7 @@ const router = Router()
 router.post('/api/tasks', async(req, res) => {
 	try {
 		const {text} = req.body
+		// Check if text includes letters or numbers
 		if( /^\s*$/.test(text)) {
 			return res.status(400).json({message: 'Text is empty!'})
 		}
@@ -20,17 +21,13 @@ router.post('/api/tasks', async(req, res) => {
 		res.status(200).json(dataToSave)
 	}
 	catch(error) {
-		res.status(400).json({message: error.message})
+		res.status(500).json({message: error.message})
 	}
 })
 router.get('/api/tasks', async(req, res) => {
 	try {
 		const data = await Task.find({userId: req.user._id})
-		if(data) {
-			res.json(data)
-		} else {
-			res.status(404).send({message: 'Tasks do not exists!'})
-		}
+		res.json(data)
 	}
 	catch(error){
 		res.status(500).json({message: error.message})
@@ -40,9 +37,6 @@ router.delete('/api/tasks/:id', async(req, res) => {
 	try {
 		const {id} = req.params
 		const data = await Task.findById(req.params.id)
-		if(!data) {
-			res.status(404).send({message: 'Task does not exist!'})
-		}
 		if(data.userId === req.user._id) {
 			await Task.findByIdAndDelete(id)
 			res.send()
@@ -51,30 +45,27 @@ router.delete('/api/tasks/:id', async(req, res) => {
 		}
 	}
 	catch (error) {
-		res.status(405).json({message: error.message})
+		res.status(500).json({message: error.message})
 	}
 })
 router.patch('/api/tasks/:id', async(req, res) => {
 	try {
 		const updatedData = req.body
-		const {id} = req.params
-		const data = await Task.findById(req.params.id)
-		if(!data) {
-			res.status(404).send({message: 'Task does not exist!'})
-		}
-		const taskDescription = await Task.findById(req.params.id)
-		if(taskDescription.description === updatedData.description) {
+		if(JSON.stringify(updatedData) === '{}') {
 			return res.status(400).json({message: 'Description didn\'t change!'})
 		}
-		const result = await Task.findByIdAndUpdate(id, updatedData)
+		const {id} = req.params
+		const data = await Task.findById(req.params.id)
+
 		if(data.userId === req.user._id) {
+			const result = await Task.findByIdAndUpdate(id, updatedData)
 			res.send(result)
 		} else {
 			res.status(403).send({message: 'Task dont belong to user'})
 		}
 	}
 	catch (error) {
-		res.status(400).json({message: error.message})
+		res.status(500).json({message: error.message})
 	}
 })
 router.get('/api/tasks/:id', async (req, res) => {
@@ -87,7 +78,8 @@ router.get('/api/tasks/:id', async (req, res) => {
 		}
 	}
 	catch(error){
-		res.status(405).json({message: error.message})
+		console.log(error)
+		res.status(500).json({message: error.message})
 	}
 })
 

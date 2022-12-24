@@ -1,5 +1,10 @@
 import mongoose from 'mongoose'
 
+interface TaskInterface extends mongoose.Document {
+	userId: string,
+	description: string
+}
+
 const userTaskSchema = new mongoose.Schema({
 	text: {
 		required: true,
@@ -23,4 +28,5 @@ const userTaskSchema = new mongoose.Schema({
 	}
 })
 
-export default mongoose.model('userTasks', userTaskSchema)
+
+export default mongoose.model<TaskInterface>('userTask', userTaskSchema)

@@ -1,11 +1,10 @@
 import {RegisterDTO} from './registerDTO'
 import {bodyValidator} from '../../shared/bodyValidator'
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 import {config} from 'dotenv'
-import Register from './registerModel'
+import UserAccount from './registerModel'
 import {Router} from 'express'
-import {User} from '../../types/customUser'
+import generateAccessToken from '../../accessToken'
 
 config()
 
@@ -18,14 +17,14 @@ registerRouter.post('/api/register', async(req, res) => {
 		const date18YearsAgo = new Date()
 		date18YearsAgo.setFullYear(date18YearsAgo.getFullYear()-18)
 		if(new Date(birth) >= date18YearsAgo) {
-			return res.status(401).json({message: 'You have to be at least 18 years old'})
+			return res.status(400).json({message: 'You have to be at least 18 years old'})
 		}
-		const userLogin = await Register.findOne({login: req.body.login}, 'login').exec()
+		const userLogin = await UserAccount.findOne({login: req.body.login}, 'login').exec()
 		if(userLogin) {
 			return res.status(400).json({message:'User already exist!'})
 		}
 		const hashedPassword = bcrypt.hashSync(req.body.password, 10)
-		const data = new Register({
+		const data = new UserAccount({
 			login: req.body.login,
 			name: req.body.name,
 			lastName: req.body.lastName,
@@ -37,16 +36,13 @@ registerRouter.post('/api/register', async(req, res) => {
 		res.status(200).json(dataToSave)
 	}
 	catch(error) {
-		res.status(400).json({message: error.message})
+		res.status(500).json({message: error.message})
 	}
 })
-const generateAccessToken = (userAccountData:User) => {
-	return jwt.sign(userAccountData, process.env.TOKEN_SECRET, {expiresIn: '1800s'})
-}
 
 registerRouter.post('/api/login', async(req, res) => {
 	try {
-		const user = await Register.findOne({login: req.body.login}).exec()
+		const user = await UserAccount.findOne({login: req.body.login}).exec()
 		if(bcrypt.compareSync(req.body.password, user.password)) {
 			delete user.password
 			const token = generateAccessToken(user.toJSON())
@@ -64,7 +60,7 @@ registerRouter.post('/api/login', async(req, res) => {
 		}
 	}
 	catch (error) {
-		res.status(400).json({message: error.message})
+		res.status(500).json({message: error.message})
 	}
 })
 

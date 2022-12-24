@@ -20,5 +20,12 @@
   ],
   "exclude": [
     "node_modules"
+  ],
+  "ts-node": {
+    "files": true
+  },
+  "files": [
+    "src/server.ts",
+    "src/@types/express.d.ts"
   ]
 }
