@@ -13,12 +13,6 @@ const registerRouter = Router()
 registerRouter.post('/api/register', async(req, res) => {
 	try {
 		await bodyValidator(RegisterDTO, req.body)
-		const birth = req.body.birthDate
-		const date18YearsAgo = new Date()
-		date18YearsAgo.setFullYear(date18YearsAgo.getFullYear()-18)
-		if(new Date(birth) >= date18YearsAgo) {
-			return res.status(400).json({message: 'You have to be at least 18 years old'})
-		}
 		const userLogin = await UserAccount.findOne({login: req.body.login}, 'login').exec()
 		if(userLogin) {
 			return res.status(400).json({message:'User already exist!'})
@@ -29,8 +23,7 @@ registerRouter.post('/api/register', async(req, res) => {
 			name: req.body.name,
 			lastName: req.body.lastName,
 			password: hashedPassword,
-			gender: req.body.gender,
-			birthDate: req.body.birthDate
+			gender: req.body.gender
 		})
 		const dataToSave = data.save()
 		res.status(200).json(dataToSave)

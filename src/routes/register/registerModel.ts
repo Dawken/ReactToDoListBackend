@@ -6,8 +6,7 @@ interface UserInterface extends mongoose.Document {
 	name: string,
 	lastName: string,
 	password: string,
-	gender: string,
-	birthDate: string,
+	gender: string
 }
 
 const userAccountSchema = new mongoose.Schema({
@@ -28,10 +27,6 @@ const userAccountSchema = new mongoose.Schema({
 		type: String
 	},
 	gender: {
-		required: true,
-		type: String
-	},
-	birthDate: {
 		required: true,
 		type: String
 	}

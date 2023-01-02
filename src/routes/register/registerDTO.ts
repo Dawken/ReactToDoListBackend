@@ -12,7 +12,6 @@ interface RegisterTypes {
     lastName: string
     password: string,
     gender: string
-    birthDate: string
 }
 
 export class RegisterDTO implements RegisterTypes {
@@ -35,7 +34,5 @@ export class RegisterDTO implements RegisterTypes {
     @IsEnum(Gender)
     	gender: Gender
 
-    @IsString()
-    	birthDate: string
 }
 

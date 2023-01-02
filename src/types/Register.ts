@@ -4,6 +4,5 @@ export type Register = {
 	name: string,
 	lastName: string,
 	password: string,
-	gender: string,
-	birthDate: string
+	gender: string
 }
