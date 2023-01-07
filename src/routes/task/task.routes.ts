@@ -18,7 +18,7 @@ router.post('/api/tasks', async(req, res) => {
 			userId: req.user._id
 		})
 		const dataToSave = data.save()
-		res.status(200).json(dataToSave)
+		res.status(201).json(dataToSave)
 	}
 	catch(error) {
 		res.status(500).json({message: error.message})
@@ -27,7 +27,7 @@ router.post('/api/tasks', async(req, res) => {
 router.get('/api/tasks', async(req, res) => {
 	try {
 		const data = await Task.find({userId: req.user._id})
-		res.json(data)
+		res.status(200).json(data)
 	}
 	catch(error){
 		res.status(500).json({message: error.message})
@@ -37,9 +37,12 @@ router.delete('/api/tasks/:id', async(req, res) => {
 	try {
 		const {id} = req.params
 		const data = await Task.findById(req.params.id)
-		if(data.userId === req.user._id) {
+
+		if(!data) {
+			res.status(204).send({message: 'Task does not exist!'})
+		} else if(data.userId === req.user._id) {
 			await Task.findByIdAndDelete(id)
-			res.send()
+			res.status(200).send()
 		} else {
 			res.status(403).send({message: 'Task does not belong to user'})
 		}
@@ -59,7 +62,7 @@ router.patch('/api/tasks/:id', async(req, res) => {
 
 		if(data.userId === req.user._id) {
 			const result = await Task.findByIdAndUpdate(id, updatedData)
-			res.send(result)
+			res.status(200).send(result)
 		} else {
 			res.status(403).send({message: 'Task dont belong to user'})
 		}
@@ -72,8 +75,8 @@ router.get('/api/tasks/:id', async (req, res) => {
 	try{
 		const data = await Task.findById(req.params.id)
 		if(data.userId === req.user._id) {
-			res.json(data)
-		}else {
+			res.status(200).json(data)
+		} else {
 			res.status(403).send({message: 'Task dont belong to user'})
 		}
 	}

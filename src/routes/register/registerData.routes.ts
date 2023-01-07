@@ -38,8 +38,7 @@ registerRouter.post('/api/login', async(req, res) => {
 		const user = await UserAccount.findOne({login: req.body.login}).exec()
 		if(!user) {
 			res.status(400).json({message: 'User does not exist!'})
-		}
-		else if(bcrypt.compareSync(req.body.password, user.password)) {
+		} else if(bcrypt.compareSync(req.body.password, user.password)) {
 			delete user.password
 			const token = generateAccessToken(user.toJSON())
 			res.cookie(
