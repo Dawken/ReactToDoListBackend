@@ -62,5 +62,19 @@ userAccountRouter.post('/api/login', async(req, res) => {
 		res.status(500).json({message: error.message})
 	}
 })
-
+userAccountRouter.post('/api/logout', async(req,res) => {
+	try {
+		res.cookie(
+			'AuthToken',
+			{
+				maxAge: 0,
+				httpOnly: true
+			}
+		)
+		res.status(200).send({message: 'Logout!'})
+	}
+	catch(error) {
+		res.status(500).json({message: error.message})
+	}
+})
 export default userAccountRouter
