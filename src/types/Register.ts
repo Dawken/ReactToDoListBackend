@@ -1,4 +1,4 @@
-export type Register = {
+export type UserAccount = {
 	_id: string,
 	login: string,
 	name: string,

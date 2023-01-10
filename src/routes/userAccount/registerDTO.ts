@@ -33,6 +33,5 @@ export class RegisterDTO implements RegisterTypes {
 
     @IsEnum(Gender)
     	gender: Gender
-
 }
 

@@ -4,7 +4,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import apiRoute from './routes/task/task.routes'
-import registerRouter from './routes/register/registerData.routes'
+import userAccountRouter from './routes/userAccount/userAccount.routes'
 import authenticateToken from './middlewares/authenticateToken'
 
 
@@ -35,8 +35,8 @@ app.set('Access-Control-Allow-Credentials', true)
 app.use(cookieParser())
 app.use(cors(corsOptions))
 app.use(express.json())
-app.use(registerRouter)
+app.use(userAccountRouter)
 app.use(authenticateToken)
 app.use(apiRoute)
 
-app.listen(5000, () => { console.log('Server started at 5000')})
+app.listen(5000, () => {console.log('Server started at 5000')})

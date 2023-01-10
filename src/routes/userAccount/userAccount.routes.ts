@@ -2,17 +2,22 @@ import {RegisterDTO} from './registerDTO'
 import {bodyValidator} from '../../shared/bodyValidator'
 import bcrypt from 'bcrypt'
 import {config} from 'dotenv'
-import UserAccount from './registerModel'
+import UserAccount from './userAccountModel'
 import {Router} from 'express'
 import generateAccessToken from '../../accessToken'
 
 config()
 
-const registerRouter = Router()
+const userAccountRouter = Router()
 
-registerRouter.post('/api/register', async(req, res) => {
+userAccountRouter.post('/api/register', async(req, res) => {
 	try {
-		await bodyValidator(RegisterDTO, req.body)
+		try {
+			await bodyValidator(RegisterDTO, req.body)
+		}
+		catch(error) {
+			return res.status(400).json({message: error.message})
+		}
 		const userLogin = await UserAccount.findOne({login: req.body.login}, 'login').exec()
 		if(userLogin) {
 			return res.status(400).json({message:'User already exist!'})
@@ -33,13 +38,12 @@ registerRouter.post('/api/register', async(req, res) => {
 	}
 })
 
-registerRouter.post('/api/login', async(req, res) => {
+userAccountRouter.post('/api/login', async(req, res) => {
 	try {
 		const user = await UserAccount.findOne({login: req.body.login}).exec()
 		if(!user) {
 			res.status(400).json({message: 'User does not exist!'})
 		} else if(bcrypt.compareSync(req.body.password, user.password)) {
-			delete user.password
 			const token = generateAccessToken(user.toJSON())
 			res.cookie(
 				'AuthToken',
@@ -59,4 +63,4 @@ registerRouter.post('/api/login', async(req, res) => {
 	}
 })
 
-export default registerRouter
+export default userAccountRouter

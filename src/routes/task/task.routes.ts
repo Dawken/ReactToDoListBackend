@@ -54,8 +54,8 @@ router.delete('/api/tasks/:id', async(req, res) => {
 router.patch('/api/tasks/:id', async(req, res) => {
 	try {
 		const updatedData = req.body
-		if(JSON.stringify(updatedData) === '{}') {
-			return res.status(400).json({message: 'Description didn\'t change!'})
+		if(JSON.stringify(updatedData) === '{}' || !updatedData) {
+			return res.status(400).json({message: 'Taskstatus or description didnt change!'})
 		}
 		const {id} = req.params
 		const data = await Task.findById(req.params.id)
@@ -81,7 +81,6 @@ router.get('/api/tasks/:id', async (req, res) => {
 		}
 	}
 	catch(error){
-		console.log(error)
 		res.status(500).json({message: error.message})
 	}
 })
