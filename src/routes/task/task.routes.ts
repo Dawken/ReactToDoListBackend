@@ -62,7 +62,6 @@ router.patch('/api/tasks/:id', async(req, res) => {
 
 		if(data.userId === req.user._id) {
 			const result = await Task.findByIdAndUpdate(id, updatedData)
-			console.log(result)
 			res.status(200).send(result)
 		} else {
 			res.status(403).send({message: 'Task doesn\'t belong to user'})
