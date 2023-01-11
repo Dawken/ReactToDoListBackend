@@ -54,8 +54,8 @@ router.delete('/api/tasks/:id', async(req, res) => {
 router.patch('/api/tasks/:id', async(req, res) => {
 	try {
 		const updatedData = req.body
-		if(JSON.stringify(updatedData) === '{}' || !updatedData) {
-			return res.status(400).json({message: 'Taskstatus or description didnt change!'})
+		if(JSON.stringify(updatedData) === '{}') {
+			return res.status(400).json({message: 'Task status or description didnt change!'})
 		}
 		const {id} = req.params
 		const data = await Task.findById(req.params.id)
@@ -64,7 +64,7 @@ router.patch('/api/tasks/:id', async(req, res) => {
 			const result = await Task.findByIdAndUpdate(id, updatedData)
 			res.status(200).send(result)
 		} else {
-			res.status(403).send({message: 'Task dont belong to user'})
+			res.status(403).send({message: 'Task doesn\'t belong to user'})
 		}
 	}
 	catch (error) {
@@ -77,7 +77,7 @@ router.get('/api/tasks/:id', async (req, res) => {
 		if(data.userId === req.user._id) {
 			res.status(200).json(data)
 		} else {
-			res.status(403).send({message: 'Task dont belong to user'})
+			res.status(403).send({message: 'Task doesn\'t belong to user'})
 		}
 	}
 	catch(error){
