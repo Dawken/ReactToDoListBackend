@@ -1,13 +1,22 @@
 import {Router} from 'express'
 import Task from './taskModel'
+import {bodyValidator} from "../../shared/bodyValidator"
+import {TaskDTO} from "./taskDTO"
+import {RegisterDTO} from "../userAccount/registerDTO";
 
 const router = Router()
 
 router.post('/api/tasks', async(req, res) => {
 	try {
 		const {text} = req.body
+		try {
+			await bodyValidator(TaskDTO, req.body)
+		}
+		catch(error) {
+			return res.status(400).json({message: error.message})
+		}
 		// Check if text includes letters or numbers
-		if( /^\s*$/.test(text)) {
+		if( /^\s*$/.test(text) || !text) {
 			return res.status(400).json({message: 'Text is empty!'})
 		}
 		const data = new Task({
@@ -54,8 +63,14 @@ router.delete('/api/tasks/:id', async(req, res) => {
 router.patch('/api/tasks/:id', async(req, res) => {
 	try {
 		const updatedData = req.body
+		try {
+			await bodyValidator(TaskDTO, updatedData)
+		}
+		catch(error) {
+			return res.status(400).json({message: error.message})
+		}
 		if(JSON.stringify(updatedData) === '{}') {
-			return res.status(400).json({message: 'Task status or description didnt change!'})
+			return res.status(400).json({message: 'Task status and description didnt change!'})
 		}
 		const {id} = req.params
 		const data = await Task.findById(req.params.id)

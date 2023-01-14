@@ -7,7 +7,10 @@ export const bodyValidator = async<ObjectType extends object>(
 	obj: ObjectType
 ) => {
 	const objInstance = plainToClass(dto, obj)
-	const errors = await validate(objInstance)
+	const errors = await validate(objInstance, {
+		whitelist: true,
+		forbidNonWhitelisted: true,
+	})
 	if (errors.length > 0) {
 		throw new TypeError(
 			`validation failed. The error fields : ${errors.map(

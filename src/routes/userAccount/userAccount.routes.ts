@@ -5,6 +5,7 @@ import {config} from 'dotenv'
 import UserAccount from './userAccountModel'
 import {Router} from 'express'
 import generateAccessToken from '../../accessToken'
+import {LoginDTO} from "./loginDTO";
 
 config()
 
@@ -40,6 +41,12 @@ userAccountRouter.post('/api/register', async(req, res) => {
 
 userAccountRouter.post('/api/login', async(req, res) => {
 	try {
+		try {
+			await bodyValidator(LoginDTO, req.body)
+		}
+		catch(error) {
+			return res.status(400).json({message: error.message})
+		}
 		const user = await UserAccount.findOne({login: req.body.login}).exec()
 		if(!user) {
 			res.status(400).json({message: 'User does not exist!'})

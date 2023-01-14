@@ -5,8 +5,7 @@ enum Gender {
     Female = 'Female',
     Other = 'Other'
 }
-
-interface RegisterTypes {
+interface Register {
     login: string
     name: string
     lastName: string
@@ -14,7 +13,8 @@ interface RegisterTypes {
     gender: string
 }
 
-export class RegisterDTO implements RegisterTypes {
+export class RegisterDTO implements Register {
+
     @Length(3, 16)
 	@IsString()
     	login: string
