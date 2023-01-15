@@ -5,7 +5,7 @@ import {config} from 'dotenv'
 import UserAccount from './userAccountModel'
 import {Router} from 'express'
 import generateAccessToken from '../../accessToken'
-import {LoginDTO} from "./loginDTO";
+import {LoginDTO} from './loginDTO'
 
 config()
 
@@ -13,12 +13,11 @@ const userAccountRouter = Router()
 
 userAccountRouter.post('/api/register', async(req, res) => {
 	try {
-		try {
-			await bodyValidator(RegisterDTO, req.body)
-		}
-		catch(error) {
-			return res.status(400).json({message: error.message})
-		}
+		await bodyValidator(RegisterDTO, req.body)
+	} catch(error) {
+		return res.status(400).json({message: error.message})
+	}
+	try {
 		const userLogin = await UserAccount.findOne({login: req.body.login}, 'login').exec()
 		if(userLogin) {
 			return res.status(400).json({message:'User already exist!'})
@@ -33,20 +32,18 @@ userAccountRouter.post('/api/register', async(req, res) => {
 		})
 		const dataToSave = data.save()
 		res.status(200).json(dataToSave)
-	}
-	catch(error) {
+	} catch(error) {
 		res.status(500).json({message: error.message})
 	}
 })
 
 userAccountRouter.post('/api/login', async(req, res) => {
 	try {
-		try {
-			await bodyValidator(LoginDTO, req.body)
-		}
-		catch(error) {
-			return res.status(400).json({message: error.message})
-		}
+		await bodyValidator(LoginDTO, req.body)
+	} catch(error) {
+		return res.status(400).json({message: error.message})
+	}
+	try {
 		const user = await UserAccount.findOne({login: req.body.login}).exec()
 		if(!user) {
 			res.status(400).json({message: 'User does not exist!'})
@@ -64,8 +61,7 @@ userAccountRouter.post('/api/login', async(req, res) => {
 		} else {
 			res.status(400).json({message: 'Password doesn\'t match!'})
 		}
-	}
-	catch (error) {
+	} catch (error) {
 		res.status(500).json({message: error.message})
 	}
 })
@@ -79,8 +75,7 @@ userAccountRouter.post('/api/logout', async(req,res) => {
 			}
 		)
 		res.status(200).send({message: 'Logout!'})
-	}
-	catch(error) {
+	} catch(error) {
 		res.status(500).json({message: error.message})
 	}
 })

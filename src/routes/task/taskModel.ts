@@ -28,5 +28,4 @@ const userTaskSchema = new mongoose.Schema({
 	}
 })
 
-
 export default mongoose.model<TaskInterface>('userTask', userTaskSchema)
