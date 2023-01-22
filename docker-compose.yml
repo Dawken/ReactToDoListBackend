@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:5.0.2
+    restart: unless-stopped
+    volumes:
+      - ./data:/data/db
+    env_file: .env
+    ports:
+      - ${MONGODB_LOCAL_PORT}:${MONGODB_LOCAL_PORT}
+  app:
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - TOKEN_SECRET=${TOKEN_SECRET}
+      - ORIGIN=${ORIGIN}
+    ports:
+       - ${NODE_LOCAL_PORT}:${NODE_LOCAL_PORT}
