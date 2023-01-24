@@ -27,7 +27,7 @@ const userAccountSchema = new mongoose.Schema({
 		type: String
 	},
 	gender: {
-		required: true,
+		required: false,
 		type: String
 	}
 })

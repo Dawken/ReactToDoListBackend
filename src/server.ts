@@ -6,9 +6,9 @@ import cors from 'cors'
 import apiRoute from './routes/task/task.routes'
 import userAccountRouter from './routes/userAccount/userAccount.routes'
 import authenticateToken from './middlewares/authenticateToken'
+import {mongoDb} from './shared/mongoDbUrl'
 
-
-const mongoString = process.env.DATABASE_URL
+const mongoString = mongoDb.url
 config()
 const app = express()
 
