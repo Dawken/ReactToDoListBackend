@@ -20,7 +20,7 @@ userAccountRouter.post('/api/register', async(req, res) => {
 	try {
 		const userLogin = await UserAccount.findOne({login: req.body.login}, 'login').exec()
 		if(userLogin) {
-			return res.status(400).json({message:'User already exist!'})
+			return res.status(400).json({errorCode: 'user-already-exist'})
 		}
 		const hashedPassword = bcrypt.hashSync(req.body.password, 10)
 		const data = new UserAccount({

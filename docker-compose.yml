@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   mongodb:
     image: mongo:5.0.2
     restart: unless-stopped
@@ -9,6 +10,9 @@ services:
     env_file: .env
     ports:
       - ${MONGODB_LOCAL_PORT}:${MONGODB_LOCAL_PORT}
+    networks:
+      - taskNetwork
+
   app:
     depends_on:
       - mongodb
@@ -27,3 +31,10 @@ services:
       - ORIGIN=${ORIGIN}
     ports:
        - ${NODE_LOCAL_PORT}:${NODE_LOCAL_PORT}
+    networks:
+       - taskNetwork
+
+
+networks:
+  taskNetwork:
+    driver: bridge
