@@ -1,25 +1,29 @@
 import cookieParser from 'cookie-parser'
-import {config} from 'dotenv'
+import { config } from 'dotenv'
 import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import apiRoute from './routes/task/task.routes'
 import userAccountRouter from './routes/userAccount/userAccount.routes'
 import authenticateToken from './middlewares/authenticateToken'
-import {mongoDb} from './shared/mongoDbUrl'
+import { mongoDb } from './shared/mongoDbUrl'
 
-const mongoString = mongoDb.url
 config()
 const app = express()
 
+const mongoString = mongoDb.url
 const localhost = process.env.ORIGIN
 
 const corsOptions = {
 	origin: localhost,
-	credentials: true
+	credentials: true,
 }
 
-mongoose.connect(mongoString,{useNewUrlParser: true , useUnifiedTopology: true, useFindAndModify: false})
+mongoose.connect(mongoString, {
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
+	useFindAndModify: false,
+})
 
 const database = mongoose.connection
 
@@ -38,5 +42,8 @@ app.use(express.json())
 app.use(userAccountRouter)
 app.use(authenticateToken)
 app.use(apiRoute)
+const PORT = process.env.NODE_DOCKER_PORT || 8080
 
-app.listen(5000, () => {console.log('Server started at 5000')})
+app.listen(PORT, () => {
+	console.log(`Server started at ${PORT}`, mongoString)
+})
