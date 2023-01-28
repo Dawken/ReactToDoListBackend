@@ -1,16 +1,14 @@
-import {IsString} from 'class-validator'
+import { IsString } from 'class-validator'
 
 interface Login {
-    login: string
-    password: string
+	login: string;
+	password: string;
 }
 
 export class LoginDTO implements Login {
+	@IsString()
+		login: string
 
-    @IsString()
-    	login: string
-
-    @IsString()
-    	password: string
+	@IsString()
+		password: string
 }
-

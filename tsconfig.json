@@ -6,6 +6,7 @@
     "esModuleInterop": true,
     "alwaysStrict": true,
     "noImplicitAny": true,
+    "useUnknownInCatchVariables": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",

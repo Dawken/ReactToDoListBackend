@@ -1,8 +1,8 @@
-import {ClassType} from 'class-transformer/ClassTransformer'
-import {plainToClass} from 'class-transformer'
-import {validate} from 'class-validator'
+import { ClassType } from 'class-transformer/ClassTransformer'
+import { plainToClass } from 'class-transformer'
+import { validate } from 'class-validator'
 
-export const bodyValidator = async<ObjectType extends object>(
+export const bodyValidator = async <ObjectType extends object>(
 	dto: ClassType<ObjectType>,
 	obj: ObjectType
 ) => {
