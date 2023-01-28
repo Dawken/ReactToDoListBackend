@@ -1,15 +1,15 @@
-import {Router} from 'express'
+import { Router } from 'express'
 import Task from './taskModel'
-import {bodyValidator} from '../../shared/bodyValidator'
-import {TaskToUpdateDTO} from './taskToUpdateDTO'
+import { bodyValidator } from '../../shared/bodyValidator'
+import { TaskToUpdateDTO } from './taskToUpdateDTO'
 
 const router = Router()
 
-router.post('/api/tasks', async(req, res) => {
+router.post('/api/tasks', async (req, res) => {
 	try {
 		await bodyValidator(TaskToUpdateDTO, req.body)
-	} catch(error) {
-		return res.status(400).json({message: error.message})
+	} catch (error) {
+		return res.status(400).json({ message: error.message })
 	}
 	try {
 		const data = new Task({
@@ -17,73 +17,75 @@ router.post('/api/tasks', async(req, res) => {
 			date: new Date().toLocaleString(),
 			description: '',
 			taskStatus: 'todo',
-			userId: req.user._id
+			userId: req.user._id,
 		})
 		const dataToSave = data.save()
 		res.status(201).json(dataToSave)
-	} catch(error) {
-		res.status(500).json({message: error.message})
+	} catch (error) {
+		res.status(500).json({ message: error.message })
 	}
 })
-router.get('/api/tasks', async(req, res) => {
+router.get('/api/tasks', async (req, res) => {
 	try {
-		const data = await Task.find({userId: req.user._id})
+		const data = await Task.find({ userId: req.user._id })
 		res.status(200).json(data)
-	} catch(error){
-		res.status(500).json({message: error.message})
+	} catch (error) {
+		res.status(500).json({ message: error.message })
 	}
 })
-router.delete('/api/tasks/:id', async(req, res) => {
+router.delete('/api/tasks/:id', async (req, res) => {
 	try {
-		const {id} = req.params
+		const { id } = req.params
 		const data = await Task.findById(req.params.id)
 
-		if(!data) {
-			res.status(204).send({message: 'Task does not exist!'})
-		} else if(data.userId === req.user._id) {
+		if (!data) {
+			res.status(204).send({ message: 'Task does not exist!' })
+		} else if (data.userId === req.user._id) {
 			await Task.findByIdAndDelete(id)
 			res.status(200).send()
 		} else {
-			res.status(403).send({message: 'Task does not belong to user'})
+			res.status(403).send({ message: 'Task does not belong to user' })
 		}
 	} catch (error) {
-		res.status(500).json({message: error.message})
+		res.status(500).json({ message: error.message })
 	}
 })
-router.patch('/api/tasks/:id', async(req, res) => {
+router.patch('/api/tasks/:id', async (req, res) => {
 	const updatedData = req.body
 	try {
 		await bodyValidator(TaskToUpdateDTO, updatedData)
-	} catch(error) {
-		return res.status(400).json({message: error.message})
+	} catch (error) {
+		return res.status(400).json({ message: error.message })
 	}
 	try {
-		if(JSON.stringify(updatedData) === '{}') {
-			return res.status(400).json({message: 'Task status and description didnt change!'})
+		if (JSON.stringify(updatedData) === '{}') {
+			return res
+				.status(400)
+				.json({ message: 'Task status and description didnt change!' })
 		}
-		const {id} = req.params
+		const { id } = req.params
 		const data = await Task.findById(req.params.id)
 
-		if(data.userId === req.user._id) {
+		if (data.userId === req.user._id) {
 			const result = await Task.findByIdAndUpdate(id, updatedData)
 			res.status(200).send(result)
 		} else {
-			res.status(403).send({message: 'Task doesn\'t belong to user'})
+			res.status(403).send({ message: 'Task doesn\'t belong to user' })
 		}
 	} catch (error) {
-		res.status(500).json({message: error.message})
+		res.status(500).json({ message: error.message })
 	}
 })
 router.get('/api/tasks/:id', async (req, res) => {
 	try {
 		const data = await Task.findById(req.params.id)
-		if(data.userId === req.user._id) {
+		if (data.userId === req.user._id) {
 			res.status(200).json(data)
 		} else {
-			res.status(403).send({message: 'Task doesn\'t belong to user'})
+			res.status(403).send({ message: 'Task doesn\'t belong to user' })
 		}
-	} catch(error){
-		res.status(500).json({message: error.message})
+	} catch (error) {
+		res.status(500).json({ message: error.message })
 	}
 })
 

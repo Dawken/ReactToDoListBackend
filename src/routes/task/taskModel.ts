@@ -1,31 +1,31 @@
 import mongoose from 'mongoose'
 
 interface TaskInterface extends mongoose.Document {
-	userId: string,
-	description: string
+	userId: string;
+	description: string;
 }
 
 const userTaskSchema = new mongoose.Schema({
 	text: {
 		required: true,
-		type: String
+		type: String,
 	},
 	date: {
 		required: true,
-		type: String
+		type: String,
 	},
 	description: {
 		required: false,
-		type: String
+		type: String,
 	},
 	taskStatus: {
 		required: true,
-		type: String
+		type: String,
 	},
-	userId : {
+	userId: {
 		required: true,
-		type: String
-	}
+		type: String,
+	},
 })
 
 export default mongoose.model<TaskInterface>('userTask', userTaskSchema)
