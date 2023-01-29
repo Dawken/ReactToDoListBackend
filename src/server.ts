@@ -11,7 +11,7 @@ import { mongoDb } from './shared/mongoDbUrl'
 config()
 const app = express()
 
-const mongoString = mongoDb.url
+const mongoConnectionString = mongoDb.url
 const localhost = process.env.ORIGIN
 
 const corsOptions = {
@@ -19,7 +19,7 @@ const corsOptions = {
 	credentials: true,
 }
 
-mongoose.connect(mongoString, {
+mongoose.connect(mongoConnectionString, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useFindAndModify: false,
@@ -45,5 +45,5 @@ app.use(apiRoute)
 const PORT = process.env.NODE_DOCKER_PORT || 8080
 
 app.listen(PORT, () => {
-	console.log(`Server started at ${PORT}`, mongoString)
+	console.log(`Server started at ${PORT}`)
 })

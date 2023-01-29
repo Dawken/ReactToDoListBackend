@@ -14,7 +14,7 @@ router.post('/api/tasks', async (req, res) => {
 	try {
 		const data = new Task({
 			text: req.body.text,
-			date: new Date().toLocaleString(),
+			date: new Date().toLocaleString('en-GB'),
 			description: '',
 			taskStatus: 'todo',
 			userId: req.user._id,

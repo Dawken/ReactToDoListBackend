@@ -66,8 +66,7 @@ userAccountRouter.post('/api/login', async (req, res) => {
 })
 userAccountRouter.post('/api/logout', async (req, res) => {
 	try {
-		res.cookie('AuthToken', {
-			maxAge: 0,
+		res.clearCookie('AuthToken', {
 			httpOnly: true,
 		})
 		res.status(200).send({ message: 'Logout!' })
