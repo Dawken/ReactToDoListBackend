@@ -1,5 +1,10 @@
-import { IsOptional, IsString, Matches } from 'class-validator'
+import { IsEnum, IsOptional, IsString, Matches } from 'class-validator'
 
+enum TaskStatus {
+	todo = 'todo',
+	during = 'during',
+	done = 'done',
+}
 interface TaskToUpdate {
 	text?: string;
 	taskStatus?: string;
@@ -13,7 +18,7 @@ export class TaskToUpdateDTO implements TaskToUpdate {
 		text?: string
 
 	@IsOptional()
-	@IsString()
+	@IsEnum(TaskStatus)
 		taskStatus?: string
 
 	@IsOptional()

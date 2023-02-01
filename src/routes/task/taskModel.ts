@@ -3,6 +3,8 @@ import mongoose from 'mongoose'
 interface TaskInterface extends mongoose.Document {
 	userId: string;
 	description: string;
+	taskStatus: string;
+	text: string;
 }
 
 const userTaskSchema = new mongoose.Schema({

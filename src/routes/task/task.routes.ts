@@ -58,13 +58,16 @@ router.patch('/api/tasks/:id', async (req, res) => {
 		return res.status(400).json({ message: error.message })
 	}
 	try {
-		if (JSON.stringify(updatedData) === '{}') {
-			return res
-				.status(400)
-				.json({ message: 'Task status and description didnt change!' })
+		const data = await Task.findById(req.params.id)
+		if (
+			JSON.stringify(updatedData) === '{}' ||
+			(data.taskStatus === updatedData.taskStatus &&
+				data.text === updatedData.text &&
+				data.description === updatedData.description)
+		) {
+			return res.status(400).json({ errorCode: 'nothing-changed' })
 		}
 		const { id } = req.params
-		const data = await Task.findById(req.params.id)
 
 		if (data.userId === req.user._id) {
 			const result = await Task.findByIdAndUpdate(id, updatedData)
