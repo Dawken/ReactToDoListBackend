@@ -2,6 +2,7 @@ import { Router } from 'express'
 import Task from './taskModel'
 import { bodyValidator } from '../../shared/bodyValidator'
 import { TaskToUpdateDTO } from './taskToUpdateDTO'
+import dayjs from 'dayjs'
 
 const router = Router()
 
@@ -14,7 +15,7 @@ router.post('/api/tasks', async (req, res) => {
 	try {
 		const data = new Task({
 			text: req.body.text,
-			date: new Date().toLocaleString('pl'),
+			date: dayjs().format(),
 			description: '',
 			taskStatus: 'todo',
 			userId: req.user._id,

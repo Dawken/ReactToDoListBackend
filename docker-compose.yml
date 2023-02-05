@@ -28,6 +28,7 @@ services:
       - DB_PORT=$MONGODB_DOCKER_PORT
       - TOKEN_SECRET=$TOKEN_SECRET
       - ORIGIN=$ORIGIN
+      - TZ=$TZ
     stdin_open: true
     tty: true
 
