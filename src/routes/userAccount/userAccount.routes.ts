@@ -49,7 +49,7 @@ userAccountRouter.post('/api/login', async (req, res) => {
 	try {
 		const user = await UserAccount.findOne({ login: req.body.login }).exec()
 		if (!user) {
-			res.status(400).json({ message: 'User does not exist!' })
+			res.status(400).json({ errorCode: 'user-does-not-exist' })
 		} else if (bcrypt.compareSync(req.body.password, user.password)) {
 			const token = generateAccessToken(user.toJSON())
 			res.cookie('AuthToken', token, {
@@ -58,7 +58,7 @@ userAccountRouter.post('/api/login', async (req, res) => {
 			})
 			res.status(200).send({ message: 'Logged' })
 		} else {
-			res.status(400).json({ message: 'Password doesn\'t match!' })
+			res.status(400).json({ errorCode: 'incorrect-password' })
 		}
 	} catch (error) {
 		res.status(500).json({ message: error.message })
