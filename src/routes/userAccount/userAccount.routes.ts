@@ -55,6 +55,8 @@ userAccountRouter.post('/api/login', async (req, res) => {
 			res.cookie('AuthToken', token, {
 				maxAge: 1800 * 1000,
 				httpOnly: true,
+				sameSite: 'none',
+				secure: true,
 			})
 			res.status(200).send({ message: 'Logged' })
 		} else {
