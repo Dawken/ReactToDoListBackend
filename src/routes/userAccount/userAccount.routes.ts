@@ -52,12 +52,11 @@ userAccountRouter.post('/api/login', async (req, res) => {
 			res.status(400).json({ errorCode: 'user-does-not-exist' })
 		} else if (bcrypt.compareSync(req.body.password, user.password)) {
 			const token = generateAccessToken(user.toJSON())
-			res.cookie('AuthToken', token, {
-				maxAge: 1800 * 1000,
-				httpOnly: true,
-				sameSite: 'none',
-				secure: true,
-			})
+			const expires = new Date(Date.now() + 3600 * 1000)
+			res.setHeader(
+				'Set-Cookie',
+				`AuthToken=${token}; Max-Age=3600; Path=/; Expires=${expires.toUTCString()}; HttpOnly; Secure; SameSite=None;`
+			)
 			res.status(200).send({ message: 'Logged' })
 		} else {
 			res.status(400).json({ errorCode: 'incorrect-password' })
